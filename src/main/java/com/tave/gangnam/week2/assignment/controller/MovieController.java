@@ -25,10 +25,8 @@ public class MovieController {
     public ResponseEntity<MovieResponseDTO> createMovie(
             @RequestBody MovieRequestDTO requestDto
             ) {
-        Movie movie = MovieMapper.toEntity(requestDto);
-        Movie savedMovie = movieService.saveMovie(movie);
-        MovieResponseDTO responseDto = MovieMapper.toDTO(savedMovie);
-        return ResponseEntity.ok(responseDto);
+        MovieResponseDTO responseDTO = movieService.saveMovie(requestDto);
+        return ResponseEntity.ok(responseDTO);
     }
 
     // 영화 조회 API
