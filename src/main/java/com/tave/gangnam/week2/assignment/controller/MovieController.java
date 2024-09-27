@@ -1,5 +1,6 @@
 package com.tave.gangnam.week2.assignment.controller;
 
+import com.tave.gangnam.week2.assignment.domain.MovieMapper;
 import com.tave.gangnam.week2.assignment.dto.MovieRequestDTO;
 import com.tave.gangnam.week2.assignment.dto.MovieResponseDTO;
 import com.tave.gangnam.week2.assignment.domain.Movie;
@@ -22,8 +23,8 @@ public class MovieController {
     public MovieResponseDTO createMovie(
             @RequestBody MovieRequestDTO requestDto
             ) {
-        Movie movie = MovieRequestDTO.toEntity(requestDto);
-        return Movie.toDTO(movie);
+        Movie movie = MovieMapper.toEntity(requestDto);
+        return MovieMapper.toDTO(movie);
     }
 
     // 영화 조회 API

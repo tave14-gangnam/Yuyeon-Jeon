@@ -15,14 +15,4 @@ public class MovieRequestDTO {
     private String genre;
     private String director;
     private String year;
-
-    // DTO -> Entity 변환
-    public static Movie toEntity(MovieRequestDTO requestDTO) {
-        return Movie.builder()
-                .title(requestDTO.getTitle())
-                .genre(requestDTO.getGenre())
-                .director(requestDTO.getDirector())
-                .year(requestDTO.getYear())
-                .build();
-    }
 }
