@@ -5,8 +5,10 @@ import com.tave.gangnam.week2.assignment.dto.MovieRequestDTO;
 import com.tave.gangnam.week2.assignment.dto.MovieResponseDTO;
 import com.tave.gangnam.week2.assignment.domain.Movie;
 import com.tave.gangnam.week2.assignment.service.MovieService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -20,16 +22,24 @@ public class MovieController {
 
     // 영화 등록 API
     @PostMapping("/create")
-    public MovieResponseDTO createMovie(
+    public ResponseEntity<MovieResponseDTO> createMovie(
             @RequestBody MovieRequestDTO requestDto
             ) {
         Movie movie = MovieMapper.toEntity(requestDto);
-        return MovieMapper.toDTO(movie);
+        Movie savedMovie = movieService.saveMovie(movie);
+        MovieResponseDTO responseDto = MovieMapper.toDTO(savedMovie);
+        return ResponseEntity.ok(responseDto);
     }
 
     // 영화 조회 API
-    @GetMapping("/register/{title}")
-    public Optional<Movie> getMovie(@PathVariable String title) {
-        return movieService.findMovie(title);
+    @GetMapping("/read/{id}")
+    public Optional<Movie> getMovie(@PathVariable Long id) {
+        return movieService.findMovie(id);
+    }
+
+    // 제목으로 영화 조회
+    @GetMapping("/read")
+    public List<Movie> getMoviesByTitle(String title) {
+        return movieService.findMoviesByTitle(title);
     }
 }

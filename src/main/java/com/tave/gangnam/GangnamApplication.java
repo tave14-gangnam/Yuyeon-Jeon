@@ -13,5 +13,4 @@ public class GangnamApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(GangnamApplication.class, args);
 	}
-
 }
