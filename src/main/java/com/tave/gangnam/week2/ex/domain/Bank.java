@@ -1,5 +1,6 @@
 package com.tave.gangnam.week2.ex.domain;
 
+import com.tave.gangnam.week2.ex.type.BankName;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +16,7 @@ public class Bank {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String bankName;
+    private BankName bankName;
 
     /**
      * 유저가 어떤은행 가입이 되었는지, 그리고 대출, 적금을 알아보는 프로그램

@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BankResponseDTO {
+public class BankUserRequestDTO {
+    private String userName;
+    private String password;
     private BankName bankName;
 }

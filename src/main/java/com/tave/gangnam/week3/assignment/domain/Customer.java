@@ -1,6 +1,5 @@
-package com.tave.gangnam.week2.ex.domain;
+package com.tave.gangnam.week3.assignment.domain;
 
-import com.tave.gangnam.week2.ex.type.BankName;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,17 +14,18 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BankUser {
+public class Customer {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "bankuser_id")
     private Long id;
 
-    @OneToMany(mappedBy = "bankUser")
-    private List<Bank> banks = new ArrayList<>();
-
-    private String userName;
-    @Column(length=4)
+    private String customerName;
+    private int age;
     private String password;
 
-    private BankName bankName;
+    @ManyToOne
+    @JoinColumn(name = "COMPANY_ID")
+    private Company company;
+
+    private Long savingAmount;
+    private Long loanAmount;
 }
