@@ -1,6 +1,5 @@
 package com.tave.gangnam.week3.assignment.service;
 
-import ch.qos.logback.core.spi.ErrorCodes;
 import com.tave.gangnam.week3.assignment.domain.*;
 import com.tave.gangnam.week3.assignment.dto.*;
 import com.tave.gangnam.week3.assignment.exception.LoanException;
@@ -24,6 +23,9 @@ public class LoanService {
     // 유저 등록하기
     @Transactional
     public CustomerResponseDTO registerCustomer(CustomerRequestDTO requestDto) {
+        // 이미 등록된 고객인지 확인
+
+
          Customer savedCustomer = customerRepository.save(CustomerMapper.toEntity(requestDto));
          return CustomerMapper.toDTO(savedCustomer);
     }
@@ -69,6 +71,9 @@ public class LoanService {
                 .orElseThrow(() -> new LoanException(ErrorCode.COMPANY_NOT_FOUND)); // 찾으려는 회사의 이름이 존재하지 않을 때
 
         // 이미 등록된 고객인지 확인
+        if (customerRepository.findById(requestDto.getUserId()).isPresent()) {
+            throw new LoanException(ErrorCode.USER_ALREADY_EXISTS); // 신규 고객이 아님
+        }
 
         Customer savedCustomer = customerRepository.save(
                 Customer.builder()
@@ -76,27 +81,23 @@ public class LoanService {
                         .password(requestDto.getPassword())
                         .company(findCompany)
                         .loanAmount(requestDto.getLoanAmount())
-                        .build());
-        return LoanMapper.toDTO(savedCustomer);
+                        .color(requestDto.colorSetting(requestDto.getLoanAmount()))
+                      .build()); // TODO : 코드에서 좀더 중복 제거하기
+
+        LoanResponseDTO responseDTO = LoanMapper.toDTO(savedCustomer);
+        return responseDTO;
     }
 
-//    // 대출 서비스 이용하기 - 기존의 고객에서 업데이트
-//    @Transactional
-//    public LoanResponseDTO useLoan(LoanRequestDTO requestDTO) {
-//        // 이용하려는 회사의 이름 찾기
-//        Company findedCompany = companyRepository.findByCompanyName(requestDTO.getCompanyName())
-//                .orElseThrow(() -> new LoanException(ErrorCode.COMPANY_NOT_FOUND));
-//
-//        // 이미 등록된 유저인지 확인하기
-//
-//        Customer savedCustomer = customerRepository.save(
-//                Customer.builder()
-//                        .customerName(requestDTO.getCustomerName())
-//                        .password(requestDTO.getPassword())
-//                        .company(findedCompany)
-//                        .loanAmount(requestDTO.getLoanAmount())
-//                        .build());
-//
-//        return LoanMapper.toDTO(savedCustomer);
-//    }
+    // 대출 서비스 이용하기 - 기존의 고객에서 업데이트
+    @Transactional
+    public LoanResponseDTO useLoan(LoanRequestDTO requestDTO) {
+        // 이용하려는 회사의 이름 찾기
+        Company findedCompany = companyRepository.findByCompanyName(requestDTO.getCompanyName())
+                .orElseThrow(() -> new LoanException(ErrorCode.COMPANY_NOT_FOUND));
+
+        // 이미 등록된 유저인지 확인하기
+        Customer findedCustomer = customerRepository.findById(requestDTO.getUserId())
+                .orElseThrow(() -> new LoanException(ErrorCode.USER_NOT_FOUND)); // 유저 조회 실패 -> 새로 등록 요청
+        return LoanMapper.toDTO(findedCustomer.update(findedCompany, requestDTO.getLoanAmount()));
+    }
 }

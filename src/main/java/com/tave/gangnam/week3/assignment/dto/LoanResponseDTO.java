@@ -12,4 +12,6 @@ public class LoanResponseDTO {
     private Long loanAmount;
 
     private Company company;
+
+    private String color;
 }

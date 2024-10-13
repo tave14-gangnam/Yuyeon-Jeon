@@ -11,7 +11,7 @@ public class LoanMapper {
     public static LoanResponseDTO toDTO(Customer customer) {
         return LoanResponseDTO.builder()
                 .customerName(customer.getCustomerName())
-                .companyName(customer.getCompany().getCompanyName())
+                .company(customer.getCompany())
                 .loanAmount(customer.getLoanAmount())
                 .build();
     }
