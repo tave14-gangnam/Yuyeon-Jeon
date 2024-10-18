@@ -19,6 +19,7 @@ import java.time.LocalDate;
 public class Posts {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
+
     private String title;
     private String content;
     private LocalDate postedAt;
