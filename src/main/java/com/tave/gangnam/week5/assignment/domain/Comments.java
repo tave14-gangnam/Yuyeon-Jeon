@@ -1,9 +1,6 @@
 package com.tave.gangnam.week5.assignment.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,8 +16,13 @@ import java.time.LocalDate;
 public class Comments {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String writer;
-    private String content;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "POST_ID")
+    private Posts postId;
+
+    private String employeeNo;
+    private String comment;
     private LocalDate commentedAt;
 
 
